@@ -1,15 +1,13 @@
 package pricefinder;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
-import pricefinder.driver.DriverProviderInterface;
 import pricefinder.exceptions.BadUrlException;
 import pricefinder.exceptions.PriceNotFoundException;
+import pricefinder.selenium.PageLoader;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public abstract class BasePriceFinder {
+public abstract class PriceFinder {
 
     /**
      * Uses to save price element identity on same
@@ -21,7 +19,8 @@ public abstract class BasePriceFinder {
 
     private PriceElementFinderInterface finder;
 
-    private DriverProviderInterface driverProvider;
+    private PageLoader loader;
+
 
     /**
      * Check, availability of db access
@@ -43,8 +42,8 @@ public abstract class BasePriceFinder {
         this.finder = finder;
     }
 
-    public void setDriverProvider(DriverProviderInterface driverProvider) {
-        this.driverProvider = driverProvider;
+    public void setLoader(PageLoader loader) {
+        this.loader = loader;
     }
 
     /**
@@ -54,20 +53,12 @@ public abstract class BasePriceFinder {
      */
     public String get(String url) throws PriceNotFoundException, BadUrlException{
 
-        WebDriver driver = driverProvider.getDriver();
+
         Element priceElement;
-
-        try {
-            driver.get(url);
-        }
-        catch (WebDriverException e){
-            throw new BadUrlException();
-        }
-
-        driverProvider.afterPageLoad(driver);
+        loader.loadPage(url);
 
         if(dbEnable()) {
-            priceElement = dbFinder.find(driver, dbProvider);
+            priceElement = dbFinder.find(loader, dbProvider);
 
             if(priceElement != null)
                 return priceElement.getText();
@@ -79,11 +70,11 @@ public abstract class BasePriceFinder {
 
         }
 
-        priceElement = finder.find(driver);
+        priceElement = finder.find(loader);
 
         if(priceElement != null){
 
-            if(dbEnable()) try {
+            if(dbEnable() && priceElement.getIdentity() != null) try {
 
                 dbProvider.write(
                         (new URL(url)).getHost(),
