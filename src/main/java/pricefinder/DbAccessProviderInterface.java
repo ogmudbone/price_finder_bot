@@ -13,9 +13,15 @@ public interface DbAccessProviderInterface {
      * @param identity string to identify price element of this domain
      *                 by some of types described below
      * @param identityType type of identity
-     *                     could be XPATH, ID or CLASS
+     *                     could be IdentityTypes.XPATH, IdentityTypes.ID or IdentityTypes.CLASS
      */
     void write(String domain, String identity, int identityType);
+
+    /**
+     * calls to remove db record
+     * @param domain domain of online shop
+     */
+    void remove(String domain);
 
     /**
      * Calls to read identity string
@@ -29,7 +35,7 @@ public interface DbAccessProviderInterface {
      * Calls to read identity type
      *
      * @param domain domain of online shop
-     * @return identity types of price element could be XPATH, ID or CLASS
+     * @return identity types of price element could be IdentityTypes.XPATH, IdentityTypes.ID or IdentityTypes.CLASS
      */
     String readIdentityType(String domain);
 
