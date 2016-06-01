@@ -1,9 +1,9 @@
 package pricefinder;
 
-import pricefinder.exceptions.BadUrlException;
+import org.openqa.selenium.WebDriver;
 import pricefinder.exceptions.PriceNotFoundException;
-import pricefinder.selenium.PageLoader;
-
+import pricefinder.identity.DomainIdentity;
+import pricefinder.driver.DriverProviderInterface;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -15,12 +15,9 @@ public abstract class PriceFinder {
      */
     private DbAccessProviderInterface dbProvider;
 
-    private DbPriceElementFinderInterface dbFinder;
+    private DriverProviderInterface driverProvider;
 
     private PriceElementFinderInterface finder;
-
-    private PageLoader loader;
-
 
     /**
      * Check, availability of db access
@@ -34,16 +31,12 @@ public abstract class PriceFinder {
         this.dbProvider = provider;
     }
 
-    public void setDbFinder(DbPriceElementFinderInterface dbFinder){
-        this.dbFinder = dbFinder;
-    }
-
     public void setFinder(PriceElementFinderInterface finder) {
         this.finder = finder;
     }
 
-    public void setLoader(PageLoader loader) {
-        this.loader = loader;
+    public void setDriverProvider(DriverProviderInterface driverProvider) {
+        this.driverProvider = driverProvider;
     }
 
     /**
@@ -51,45 +44,37 @@ public abstract class PriceFinder {
      * @param url url of page to search price
      * @return price of item
      */
-    public String get(String url) throws PriceNotFoundException, BadUrlException{
-
+    public String get(String url) throws PriceNotFoundException, MalformedURLException {
 
         Element priceElement;
-        loader.loadPage(url);
+        DomainIdentity newIdentity;
+        DomainIdentity identity = null;
+        WebDriver driver = driverProvider.getDriver();
+        String host = (new URL(url)).getHost();
+
+        driver.get(url);
+        driverProvider.afterPageLoad(driver);
+
+        if (dbEnable()) identity = dbProvider.readIdentity(host);
+
+        priceElement = finder.findByIdentity(driver, identity);
+
+        if(priceElement == null) priceElement = finder.find(driver);
+        if(priceElement == null) throw new PriceNotFoundException();
 
         if(dbEnable()) {
-            priceElement = dbFinder.find(loader, dbProvider);
 
-            if(priceElement != null)
-                return priceElement.getText();
-            else try {
-                dbProvider.remove(((new URL(url)).getHost()));
-            } catch (MalformedURLException e) {
-                throw new BadUrlException();
+            newIdentity = finder.getRecentIdentity();
+
+            if (newIdentity != null && !newIdentity.equals(identity)) {
+                if (identity != null) dbProvider.remove(host);
+                newIdentity.setDomain(host);
+                dbProvider.write(identity);
             }
 
         }
 
-        priceElement = finder.find(loader);
-
-        if(priceElement != null){
-
-            if(dbEnable() && priceElement.getIdentity() != null) try {
-
-                dbProvider.write(
-                        (new URL(url)).getHost(),
-                        priceElement.getIdentity().getIdentityString(),
-                        priceElement.getIdentity().getIdentityType()
-                );
-
-                } catch (MalformedURLException e) {
-                    throw new BadUrlException();
-                }
-
-            return priceElement.getText();
-
-        }
-        else throw new PriceNotFoundException();
+        return priceElement.getText();
 
     }
 

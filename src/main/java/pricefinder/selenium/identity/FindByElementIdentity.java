@@ -2,18 +2,23 @@ package pricefinder.selenium.identity;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import pricefinder.Element;
-import pricefinder.identity.BaseElementIdentity;
+import org.openqa.selenium.SearchContext;
+import pricefinder.identity.DomainIdentity;
+import pricefinder.selenium.Element;
 
-abstract class FindByElementIdentity extends BaseElementIdentity {
+public abstract class FindByElementIdentity extends DomainIdentity {
 
-    @Override
-    public Element find(WebDriver driver) {
+    public FindByElementIdentity(String identityString){
+        this.setIdentityString(identityString);
+        this.setIdentityType(getIdentityType());
+    }
+
+    public Element find(SearchContext driver) {
         try {
 
-            return new Element( driver.findElement( getBy() ) );
-
+            Element element = new Element( driver.findElement( getBy() ) );
+            element.setIdentity(this);
+            return element;
         }
         catch (ElementNotFoundException e){
             return null;

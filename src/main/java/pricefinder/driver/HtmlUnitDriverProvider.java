@@ -1,4 +1,4 @@
-package pricefinder.selenium.driver;
+package pricefinder.driver;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import org.openqa.selenium.WebDriver;

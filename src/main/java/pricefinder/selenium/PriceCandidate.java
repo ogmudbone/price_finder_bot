@@ -11,7 +11,7 @@ public class PriceCandidate extends Element {
     }
 
     public PriceCandidate(Element element){
-        super(element.getWebElement());
+        super(element);
     }
 
     public int getScore() {

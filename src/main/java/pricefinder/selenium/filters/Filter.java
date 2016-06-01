@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pricefinder.selenium.PriceCandidate;
 
-import java.util.LinkedList;
+import java.util.List;
 
 
 public abstract class Filter {
@@ -29,6 +29,6 @@ public abstract class Filter {
     }
 
     abstract void filter(PriceCandidate input, WebDriver driver);
-    abstract void beforeFilter(LinkedList<PriceCandidate> input, WebDriver driver);
+    abstract void beforeFilter(List<PriceCandidate> input, WebDriver driver);
 
 }

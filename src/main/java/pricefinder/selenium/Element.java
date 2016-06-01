@@ -1,7 +1,6 @@
 package pricefinder.selenium;
 
 import org.openqa.selenium.WebElement;
-import pricefinder.identity.ElementIdentityInterface;
 
 public class Element extends pricefinder.Element {
 
@@ -11,17 +10,18 @@ public class Element extends pricefinder.Element {
         this.webElement = element;
     }
 
-    @Override
-    public ElementIdentityInterface getIdentity() {
-        return null;
+    public Element(Element element){
+        super(element);
+        this.webElement = element.webElement;
     }
 
     @Override
     public String getText() {
-        return null;
+        return webElement.getText();
     }
 
     public WebElement getWebElement() {
         return webElement;
     }
+
 }

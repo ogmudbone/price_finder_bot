@@ -1,4 +1,4 @@
-package pricefinder.selenium.driver;
+package pricefinder.driver;
 
 import org.openqa.selenium.WebDriver;
 

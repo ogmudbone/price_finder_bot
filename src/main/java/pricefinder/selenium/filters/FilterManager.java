@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import pricefinder.selenium.PriceCandidate;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class FilterManager {
 
@@ -14,22 +15,20 @@ public class FilterManager {
         return this;
     }
 
-    public LinkedList<PriceCandidate> filter(LinkedList<PriceCandidate> elements, WebDriver driver){
-
-        LinkedList<PriceCandidate> filteredElements = new LinkedList<>(elements);
+    public List<PriceCandidate> filter(List<PriceCandidate> elements, WebDriver driver){
 
         for(Filter filter : filters) {
             filter.setExecutor(driver);
-            filter.beforeFilter(filteredElements, driver);
+            filter.beforeFilter(elements, driver);
         }
 
         for(PriceCandidate candidate : elements)
             for(Filter filter : filters)
             filter.filter(candidate, driver);
 
-        filteredElements.sort(((o1, o2) -> o1.getScore() - o2.getScore()));
+        elements.sort(((o1, o2) -> o1.getScore() - o2.getScore()));
 
-        return filteredElements;
+        return elements;
 
     }
 

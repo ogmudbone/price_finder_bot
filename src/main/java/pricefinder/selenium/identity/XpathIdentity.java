@@ -4,7 +4,11 @@ import org.openqa.selenium.By;
 
 public class XpathIdentity extends FindByElementIdentity {
 
-    public int getIdentityType() {
+    public XpathIdentity(String identityString) {
+        super(identityString);
+    }
+
+    public String getIdentityType() {
         return IdentityTypes.XPATH;
     }
 

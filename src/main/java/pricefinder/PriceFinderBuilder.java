@@ -1,13 +1,12 @@
 package pricefinder;
 
-import pricefinder.selenium.PageLoader;
+import pricefinder.driver.DriverProviderInterface;
 
 public class PriceFinderBuilder {
 
     private DbAccessProviderInterface dbProvider;
-    private DbPriceElementFinderInterface dbFinder;
     private PriceElementFinderInterface finder;
-    private PageLoader loader;
+    private DriverProviderInterface driverProvider;
 
     private PriceFinder priceFinder;
 
@@ -20,8 +19,8 @@ public class PriceFinderBuilder {
         return this;
     }
 
-    public PriceFinderBuilder setDbFinder(DbPriceElementFinderInterface dbFinder) {
-        this.dbFinder = dbFinder;
+    public PriceFinderBuilder setDriverProvider(DriverProviderInterface driverProvider){
+        this.driverProvider = driverProvider;
         return this;
     }
 
@@ -30,18 +29,12 @@ public class PriceFinderBuilder {
         return this;
     }
 
-    public PriceFinderBuilder setLoader(PageLoader loader) {
-        this.loader = loader;
-        return this;
-    }
-
     public PriceFinder build(){
 
         PriceFinder newPriceFinder = this.priceFinder != null ? this.priceFinder : new PriceFinder() {};
         newPriceFinder.setDbAccessProvider(dbProvider);
-        newPriceFinder.setDbFinder(dbFinder);
-        newPriceFinder.setLoader(loader);
         newPriceFinder.setFinder(finder);
+        newPriceFinder.setDriverProvider(driverProvider);
 
         return newPriceFinder;
 
