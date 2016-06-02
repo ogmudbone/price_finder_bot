@@ -10,7 +10,6 @@ import pricefinder.selenium.textelementfinder.TextElementsFinderInterface;
 import pricefinder.selenium.textelementfinder.htmlparse.TextElementFinder;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class PriceElementFinder implements PriceElementFinderInterface {
@@ -43,7 +42,7 @@ public class PriceElementFinder implements PriceElementFinderInterface {
 
         filterManager.filter(candidates, driver);
 
-        return null;
+        return candidates.get(candidates.size() - 1);
 
     }
 
@@ -56,7 +55,9 @@ public class PriceElementFinder implements PriceElementFinderInterface {
     public Element findByIdentity(
             WebDriver driver, DomainIdentity identity
     ) {
-        return IdentityTypes.cast(identity).find(driver);
+        return identity == null ?
+                null :
+                IdentityTypes.cast(identity).find(driver);
     }
 
 }

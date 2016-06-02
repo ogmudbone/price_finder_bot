@@ -3,7 +3,7 @@ package pricefinder.selenium.filters;
 import org.openqa.selenium.WebDriver;
 import pricefinder.selenium.PriceCandidate;
 
-import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
@@ -12,7 +12,7 @@ public class FontSizeFilter extends Filter {
     public final static int FONT_SIZE_SCORE = 20;
 
     @Override
-    void beforeFilter(LinkedList<PriceCandidate> input, WebDriver driver) {
+    void beforeFilter(List<PriceCandidate> input, WebDriver driver) {
 
         int[] fontSizes = new int[input.size()];
 
@@ -26,7 +26,7 @@ public class FontSizeFilter extends Filter {
             fontSizes[i] = fontSize;
 
         }
-int lo = 1;
+
         double averageSize = IntStream.of(fontSizes).filter(value -> value > 0).average().getAsDouble();
         double[] variance = new double[fontSizes.length];
 

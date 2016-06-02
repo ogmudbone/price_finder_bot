@@ -4,7 +4,7 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import pricefinder.selenium.PriceCandidate;
 
-import java.util.LinkedList;
+import java.util.List;
 
 public class PositionFilter extends Filter {
 
@@ -50,7 +50,7 @@ public class PositionFilter extends Filter {
     }
 
     @Override
-    void beforeFilter(LinkedList<PriceCandidate> input, WebDriver driver) {
+    void beforeFilter(List<PriceCandidate> input, WebDriver driver) {
         init(driver);
     }
 

@@ -1,11 +1,11 @@
 package pricefinder.selenium.filters;
 
 import org.openqa.selenium.WebDriver;
-import pricefinder.Element;
+import pricefinder.selenium.Element;
 import pricefinder.selenium.PriceCandidate;
 
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.List;
 
 public class MarkupFilter extends Filter {
 
@@ -46,7 +46,7 @@ public class MarkupFilter extends Filter {
     }
 
     @Override
-    void beforeFilter(LinkedList<PriceCandidate> input, WebDriver driver) {
+    void beforeFilter(List<PriceCandidate> input, WebDriver driver) {
 
     }
 
