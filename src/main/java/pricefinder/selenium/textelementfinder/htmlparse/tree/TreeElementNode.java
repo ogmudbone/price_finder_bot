@@ -28,7 +28,12 @@ public class TreeElementNode {
     public TextElement merge(){
 
         TextElement mergedElement =
-                new TextElement(element.getTagStack(), element.getChildCountStack(), element.getInnerText());
+                new TextElement(
+                        element.getTagStack(),
+                        element.getChildCountStack(),
+                        element.getInnerText(),
+                        element.getAttributes()
+                );
 
         for(TreeElementNode node : childs)
             mergedElement = mergedElement.merge(node.merge());

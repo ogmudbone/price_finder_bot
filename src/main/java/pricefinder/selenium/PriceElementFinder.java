@@ -42,6 +42,12 @@ public class PriceElementFinder implements PriceElementFinderInterface {
 
         filterManager.filter(candidates, driver);
 
+        for(PriceCandidate candidate : candidates){
+            System.out.println("Score : " + candidate.getScore());
+            System.out.println(candidate.getText());
+            System.out.println();
+        }
+
         return candidates.get(candidates.size() - 1);
 
     }

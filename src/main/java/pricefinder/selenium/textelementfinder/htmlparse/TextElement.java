@@ -1,10 +1,9 @@
 package pricefinder.selenium.textelementfinder.htmlparse;
 
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import pricefinder.selenium.Element;
-import pricefinder.selenium.identity.XpathIdentity;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -13,6 +12,8 @@ public class TextElement {
     private Stack<String> tagStack;
     private Stack<Integer> childCountStack;
     private String innerText;
+    private HashMap<String, String> attributes;
+    private IdentityResolver resolver;
 
     public static ElementRelationship getRelationship(TextElement el1, TextElement el2){
 
@@ -28,24 +29,15 @@ public class TextElement {
 
     }
 
-    private String buildXpath(){
-
-        String expression = "/*[last()]";
-
-        for (Integer aChildCountStack : childCountStack)
-            expression +=
-                    "/*[last()-" + String.valueOf(
-                            Math.max(aChildCountStack, 0)
-                    ) + ']';
-
-        return expression;
-
-    }
-
-    public TextElement(Stack<String> tagStack, Stack<Integer> childCountStack, String innerText){
+    public TextElement(
+            Stack<String> tagStack,  Stack<Integer> childCountStack,
+            String innerText,        HashMap<String, String> attributes
+    ){
         this.tagStack = tagStack;
         this.childCountStack = childCountStack;
         this.innerText = innerText;
+        this.attributes = attributes;
+        this.resolver = new IdentityResolver(childCountStack, attributes);
     }
 
     public Stack<String> getTagStack() {
@@ -60,15 +52,12 @@ public class TextElement {
         return innerText;
     }
 
+    public HashMap<String, String> getAttributes(){
+        return attributes;
+    }
+
     public Element findElement(SearchContext context){
-
-        try{
-            return new XpathIdentity(buildXpath()).find(context);
-        }
-        catch (NoSuchElementException e){
-            return null;
-        }
-
+        return resolver.findElement(context);
     }
 
     public ElementRelationship getRelationship(TextElement element){
@@ -83,14 +72,16 @@ public class TextElement {
                 return new TextElement(
                         element.tagStack,
                         element.childCountStack,
-                        element.innerText + innerText
+                        element.innerText + innerText,
+                        element.attributes
                 );
 
             case PARENT:
                 return new TextElement(
                         tagStack,
                         childCountStack,
-                        element.innerText + innerText
+                        element.innerText + innerText,
+                        attributes
                 );
 
         }

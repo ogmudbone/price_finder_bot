@@ -5,6 +5,7 @@ import pricefinder.selenium.Element;
 import pricefinder.selenium.textelementfinder.TextElementsFinderInterface;
 import pricefinder.selenium.textelementfinder.htmlparse.tree.WebElementsPathForest;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Stack;
@@ -17,6 +18,10 @@ public class TextElementFinder implements TextElementsFinderInterface{
                 return text.length() < 30;
 
         return false;
+    }
+
+    private String stripComments(String html){
+        return html.replaceAll("(?s)<!--.*?-->", "");
     }
 
     private boolean isComment(String tag){
@@ -48,7 +53,18 @@ public class TextElementFinder implements TextElementsFinderInterface{
 
     }
 
+    private HashMap<String,String> parseAttributes(String tagData){
+
+        HashMap<String, String> attributes = new HashMap<>();
+        String[] splittedAttributes;
+
+        return attributes;
+
+    }
+
     private ParseDataBuffer tryFindTag(CharSequence html, int i){
+
+        IdentityResolver.resetCache();
 
         String innerTextBuffer = "";
         String tagBuffer = "";
@@ -100,6 +116,7 @@ public class TextElementFinder implements TextElementsFinderInterface{
 
         buffer.skip = i - j;
         buffer.innerText = innerTextBuffer.trim();
+        buffer.tagBuffer = tagBuffer;
 
         if(Objects.equals(buffer.tag, "script")) {
             buffer.skip = i - skipJavaScript(html, j);
@@ -115,13 +132,14 @@ public class TextElementFinder implements TextElementsFinderInterface{
 
         WebElementsPathForest forest = new WebElementsPathForest();
 
-        CharSequence html = driver.getPageSource();
+        CharSequence html = stripComments(driver.getPageSource());
 
         Stack<Integer> childCountStack = new Stack<>();
         LinkedList<Element> textElements = new LinkedList<>();
         Stack<String> innerTextStack = new Stack<>();
         boolean inBody = false;
         Stack<String> tagStack = new Stack<>();
+        HashMap<String, String> tagAttributes;
 
         for(int i = html.length() - 1; i > -1;){
 
@@ -158,11 +176,13 @@ public class TextElementFinder implements TextElementsFinderInterface{
                         childCountStack.pop();
 
                         if (!innerTextStack.peek().equals("")) {
+                            tagAttributes = parseAttributes(buffer.tagBuffer);
                             //noinspection unchecked
                             forest.add(new TextElement(
                                     (Stack<String>) tagStack.clone(), // FOR DEBUG,
                                     (Stack<Integer>) childCountStack.clone(),
-                                    innerTextStack.pop()
+                                    innerTextStack.pop(),
+                                    tagAttributes
                             ));
 
                         } else
@@ -200,6 +220,7 @@ public class TextElementFinder implements TextElementsFinderInterface{
         public String tag = "";
         public int skip;
         public TagType tagType;
+        public String tagBuffer;
     }
 
     public enum TagType {
