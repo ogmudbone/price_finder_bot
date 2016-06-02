@@ -9,8 +9,9 @@ import java.util.List;
 
 public class MarkupFilter extends Filter {
 
-    public final int ATTRIBUTE_SCORE = 5;
-    public final int OLD_PENALTY = 5;
+    public final int ATTRIBUTE_SCORE = 10;
+    public final int OLD_PENALTY = 10;
+    public final int ITEMPROP_SCORE = 25;
 
     public final String GET_ATTR_JS = "var items = {};" +
             " for (index = 0; index < arguments[0].attributes.length; ++index) {" +
@@ -36,6 +37,9 @@ public class MarkupFilter extends Filter {
             if (key.contains("price"))
                 candidate.addScore(ATTRIBUTE_SCORE);
         }
+
+        if(attributes.containsKey("itemprop") && attributes.get("itemprop").equals("price"))
+            candidate.addScore(ITEMPROP_SCORE);
 
     }
 

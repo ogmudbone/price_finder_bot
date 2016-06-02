@@ -26,7 +26,7 @@ public class PositionFilter extends Filter {
 
     private void scoreForScreenCenterDistance(PriceCandidate candidate, double distance){
         candidate.addScore(
-                (int)((1 - maxDistance/distance)*CENTER_SCORE)
+                (int)((1 - distance/maxDistance)*CENTER_SCORE)
         );
     }
 

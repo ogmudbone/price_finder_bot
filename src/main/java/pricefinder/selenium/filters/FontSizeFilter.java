@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 public class FontSizeFilter extends Filter {
 
-    public final static int FONT_SIZE_SCORE = 20;
+    public final static int FONT_SIZE_SCORE = 15;
 
     @Override
     void beforeFilter(List<PriceCandidate> input, WebDriver driver) {
@@ -42,7 +42,7 @@ public class FontSizeFilter extends Filter {
             }
 
             else if(fontSizes[i] > averageSize){
-                input.get(i).addScore((int)(FONT_SIZE_SCORE*(1 - maxVariance/variance[i])));
+                input.get(i).addScore((int)(FONT_SIZE_SCORE*(variance[i]/maxVariance)));
             }
 
         }
