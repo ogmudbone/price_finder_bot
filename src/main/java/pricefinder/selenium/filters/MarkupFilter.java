@@ -4,41 +4,29 @@ import org.openqa.selenium.WebDriver;
 import pricefinder.selenium.Element;
 import pricefinder.selenium.PriceCandidate;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class MarkupFilter extends Filter {
 
     public final int ATTRIBUTE_SCORE = 10;
     public final int OLD_PENALTY = 10;
-    public final int ITEMPROP_SCORE = 25;
-
-    public final String GET_ATTR_JS = "var items = {};" +
-            " for (index = 0; index < arguments[0].attributes.length; ++index) {" +
-            " items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value" +
-            " }; " +
-            "return items;";
-
+    public final int ITEMPROP_SCORE = 40;
 
     private void checkAttributes(PriceCandidate candidate, Element element){
 
-        //noinspection unchecked
-        HashMap<String, String> attributes =
-                (HashMap<String, String>)executeJavascript(GET_ATTR_JS, element.getWebElement());
+        String[] attributes = {"id", "class"};
 
-        for(String value : attributes.values()) {
-            if (value.contains("price"))
-                candidate.addScore(ATTRIBUTE_SCORE);
-            if(value.contains("old"))
-                candidate.addScore(-OLD_PENALTY);
-        }
+        for(String attribute : attributes)
 
-        for(String key : attributes.keySet()) {
-            if (key.contains("price"))
-                candidate.addScore(ATTRIBUTE_SCORE);
-        }
+            if(element.getWebElement().getAttribute(attribute) != null){
+                if(element.getWebElement().getAttribute(attribute).contains("price"))
+                    candidate.addScore(ATTRIBUTE_SCORE);
+                if(element.getWebElement().getAttribute(attribute).contains("old"))
+                    candidate.addScore(-OLD_PENALTY);
+            }
 
-        if(attributes.containsKey("itemprop") && attributes.get("itemprop").equals("price"))
+        if(element.getWebElement().getAttribute("itemprop") != null &&
+                element.getWebElement().getAttribute("itemprop").equals("price"))
             candidate.addScore(ITEMPROP_SCORE);
 
     }
@@ -46,7 +34,22 @@ public class MarkupFilter extends Filter {
     @Override
     void filter(PriceCandidate input, WebDriver driver) {
         checkAttributes(input, input);
-        checkAttributes(input, input.getParent(0));
+
+        List<Element> childs = input.getChilds();
+
+        for(Element child : childs)
+            checkAttributes(input, child);
+
+        if(input.getParent(0) != null){
+            checkAttributes(input, input.getParent(0));
+
+            childs = input.getParent(0).getChilds();
+
+            for(Element child : childs)
+                checkAttributes(input, child);
+
+        }
+
     }
 
     @Override

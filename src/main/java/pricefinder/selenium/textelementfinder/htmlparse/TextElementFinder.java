@@ -13,15 +13,18 @@ import java.util.Stack;
 public class TextElementFinder implements TextElementsFinderInterface{
 
     private boolean checkElementText(String text){
+
         for(char symbol : text.toCharArray())
             if(symbol > 47 && symbol < 58)
                 return text.length() < 30;
 
         return false;
+
     }
 
     private String stripComments(String html){
-        return html.replaceAll("(?s)<!--.*?-->", "");
+        return html.replaceAll("((?s)<!--.*?-->)", "")
+                .replaceAll("((?s)<!--.*?-->)", "<scriptstub></scriptstub");
     }
 
     private boolean isComment(String tag){

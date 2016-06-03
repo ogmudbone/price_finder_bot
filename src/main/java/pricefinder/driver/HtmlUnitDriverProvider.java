@@ -16,6 +16,13 @@ public class HtmlUnitDriverProvider implements DriverProviderInterface {
 
     private static class CustomHtmlUnitDriver extends HtmlUnitDriver{
 
+        public CustomHtmlUnitDriver(){
+            super();
+            this.getWebClient().getCurrentWindow().setOuterHeight(768);
+            this.getWebClient().getCurrentWindow().setOuterWidth(1366);
+            this.getWebClient().addRequestHeader("X-Javascript-Enabled", "false");
+        }
+
         @Override
         protected WebClient modifyWebClient(WebClient client) {
             WebClient modifiedClient = super.modifyWebClient(client);

@@ -13,7 +13,7 @@ public class ConsoleNoDbSample {
         PriceFinder finder = PriceFinder.getSeleniumPriceFinder();
         String price = null;
         try {
-            price = finder.get("https://f.ua/campingaz/fold-n-cool-classic-20l-dark-blue.html");
+            price = finder.get("http://www.foxtrot.com.ua/ru/shop/kondicyonery_delfa_acr-09.html");
         } catch (PriceNotFoundException | MalformedURLException e) {
             e.printStackTrace();
         }

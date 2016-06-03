@@ -3,6 +3,8 @@ package pricefinder.selenium;
 import org.openqa.selenium.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Element extends pricefinder.Element {
 
@@ -60,6 +62,25 @@ public class Element extends pricefinder.Element {
         }
 
         return new Element(parents.get(depth));
+
+    }
+
+    public List<Element> getChilds(){
+
+        List<Element> childs = new LinkedList<>();
+
+        try {
+
+            List<WebElement> webElements = getWebElement().findElements(By.xpath("child::*"));
+
+            for (WebElement element : webElements)
+                childs.add(new Element(element));
+
+            return childs;
+
+        }catch (NoSuchElementException e){
+            return childs;
+        }
 
     }
 
