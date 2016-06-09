@@ -1,7 +1,7 @@
 package pricefinder.selenium.filters;
 
 import org.openqa.selenium.WebDriver;
-import pricefinder.selenium.Element;
+import pricefinder.selenium.SeleniumElement;
 import pricefinder.selenium.PriceCandidate;
 
 import java.util.List;
@@ -71,7 +71,7 @@ public class ContentFilter extends Filter {
 
     private void scoreCurrency(PriceCandidate candidate){
 
-        Element parent = candidate.getParent(PARENT_DEPTH);
+        SeleniumElement parent = candidate.getParent(PARENT_DEPTH);
 
         if(parent != null) {
 

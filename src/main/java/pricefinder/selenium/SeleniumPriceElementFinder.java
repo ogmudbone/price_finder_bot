@@ -12,7 +12,7 @@ import pricefinder.selenium.textelementfinder.htmlparse.TextElementFinder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PriceElementFinder implements PriceElementFinderInterface {
+public class SeleniumPriceElementFinder implements PriceElementFinderInterface {
 
     private DomainIdentity recentIdentity = null;
     private TextElementsFinderInterface textElementFinder = new TextElementFinder();
@@ -33,11 +33,11 @@ public class PriceElementFinder implements PriceElementFinderInterface {
     @Override
     public Element find(WebDriver driver) {
 
-        List<pricefinder.selenium.Element> textElements =
+        List<SeleniumElement> textElements =
                 textElementFinder.find(driver);
         ArrayList<PriceCandidate> candidates = new ArrayList<>(textElements.size());
 
-        for(pricefinder.selenium.Element element : textElements)
+        for(SeleniumElement element : textElements)
         candidates.add(new PriceCandidate(element));
 
         filterManager.filter(candidates, driver);

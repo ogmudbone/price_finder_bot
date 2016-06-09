@@ -2,7 +2,7 @@ package pricefinder.selenium;
 
 import org.openqa.selenium.WebElement;
 
-public class PriceCandidate extends Element {
+public class PriceCandidate extends SeleniumElement {
 
     private int score;
 
@@ -10,7 +10,7 @@ public class PriceCandidate extends Element {
         super(element);
     }
 
-    public PriceCandidate(Element element){
+    public PriceCandidate(SeleniumElement element){
         super(element);
     }
 

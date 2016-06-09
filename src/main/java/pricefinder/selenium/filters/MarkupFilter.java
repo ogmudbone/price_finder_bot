@@ -1,7 +1,7 @@
 package pricefinder.selenium.filters;
 
 import org.openqa.selenium.WebDriver;
-import pricefinder.selenium.Element;
+import pricefinder.selenium.SeleniumElement;
 import pricefinder.selenium.PriceCandidate;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public class MarkupFilter extends Filter {
     public final int OLD_PENALTY = 10;
     public final int ITEMPROP_SCORE = 40;
 
-    private void checkAttributes(PriceCandidate candidate, Element element){
+    private void checkAttributes(PriceCandidate candidate, SeleniumElement element){
 
         String[] attributes = {"id", "class"};
 
@@ -35,9 +35,9 @@ public class MarkupFilter extends Filter {
     void filter(PriceCandidate input, WebDriver driver) {
         checkAttributes(input, input);
 
-        List<Element> childs = input.getChilds();
+        List<SeleniumElement> childs = input.getChilds();
 
-        for(Element child : childs)
+        for(SeleniumElement child : childs)
             checkAttributes(input, child);
 
         if(input.getParent(0) != null){
@@ -45,7 +45,7 @@ public class MarkupFilter extends Filter {
 
             childs = input.getParent(0).getChilds();
 
-            for(Element child : childs)
+            for(SeleniumElement child : childs)
                 checkAttributes(input, child);
 
         }

@@ -1,7 +1,7 @@
 package pricefinder.selenium.textelementfinder.htmlparse;
 
 import org.openqa.selenium.WebDriver;
-import pricefinder.selenium.Element;
+import pricefinder.selenium.SeleniumElement;
 import pricefinder.selenium.textelementfinder.TextElementsFinderInterface;
 import pricefinder.selenium.textelementfinder.htmlparse.tree.WebElementsPathForest;
 
@@ -131,14 +131,14 @@ public class TextElementFinder implements TextElementsFinderInterface{
     }
 
     @Override
-    public LinkedList<Element> find(WebDriver driver){
+    public LinkedList<SeleniumElement> find(WebDriver driver){
 
         WebElementsPathForest forest = new WebElementsPathForest();
 
         CharSequence html = stripComments(driver.getPageSource());
 
         Stack<Integer> childCountStack = new Stack<>();
-        LinkedList<Element> textElements = new LinkedList<>();
+        LinkedList<SeleniumElement> textElements = new LinkedList<>();
         Stack<String> innerTextStack = new Stack<>();
         boolean inBody = false;
         Stack<String> tagStack = new Stack<>();

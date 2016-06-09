@@ -1,7 +1,7 @@
 package pricefinder.selenium.textelementfinder.htmlparse;
 
 import org.openqa.selenium.SearchContext;
-import pricefinder.selenium.Element;
+import pricefinder.selenium.SeleniumElement;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -56,7 +56,7 @@ public class TextElement {
         return attributes;
     }
 
-    public Element findElement(SearchContext context){
+    public SeleniumElement findElement(SearchContext context){
         return resolver.findElement(context);
     }
 

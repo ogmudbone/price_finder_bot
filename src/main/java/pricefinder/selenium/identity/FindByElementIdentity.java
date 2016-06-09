@@ -4,7 +4,7 @@ import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import pricefinder.identity.DomainIdentity;
-import pricefinder.selenium.Element;
+import pricefinder.selenium.SeleniumElement;
 
 public abstract class FindByElementIdentity extends DomainIdentity {
 
@@ -13,10 +13,10 @@ public abstract class FindByElementIdentity extends DomainIdentity {
         this.setIdentityType(getIdentityType());
     }
 
-    public Element find(SearchContext driver) {
+    public SeleniumElement find(SearchContext driver) {
         try {
 
-            Element element = new Element( driver.findElement( getBy() ) );
+            SeleniumElement element = new SeleniumElement( driver.findElement( getBy() ) );
             element.setIdentity(this);
             return element;
         }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Element extends pricefinder.Element {
+public class SeleniumElement extends pricefinder.Element {
 
     private WebElement webElement;
     private static int screenHeight = -1;
@@ -16,11 +16,11 @@ public class Element extends pricefinder.Element {
     private Point location;
     private Dimension rect;
 
-    public Element(WebElement element){
+    public SeleniumElement(WebElement element){
         this.webElement = element;
     }
 
-    public Element(Element element){
+    public SeleniumElement(SeleniumElement element){
         super(element);
         this.webElement = element.webElement;
     }
@@ -55,26 +55,26 @@ public class Element extends pricefinder.Element {
         }
     }
 
-    public Element getParent(int depth){
+    public SeleniumElement getParent(int depth){
 
         if(parents.size() -1 < depth){
             fillParent(depth);
         }
 
-        return new Element(parents.get(depth));
+        return new SeleniumElement(parents.get(depth));
 
     }
 
-    public List<Element> getChilds(){
+    public List<SeleniumElement> getChilds(){
 
-        List<Element> childs = new LinkedList<>();
+        List<SeleniumElement> childs = new LinkedList<>();
 
         try {
 
             List<WebElement> webElements = getWebElement().findElements(By.xpath("child::*"));
 
             for (WebElement element : webElements)
-                childs.add(new Element(element));
+                childs.add(new SeleniumElement(element));
 
             return childs;
 

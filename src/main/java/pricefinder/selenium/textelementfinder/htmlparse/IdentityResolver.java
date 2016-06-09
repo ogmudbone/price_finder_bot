@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
-import pricefinder.selenium.Element;
+import pricefinder.selenium.SeleniumElement;
 import pricefinder.selenium.identity.IdIdentity;
 import pricefinder.selenium.identity.XpathIdentity;
 
@@ -46,9 +46,9 @@ public class IdentityResolver {
         this.attributes = attributes;
     }
 
-    public Element findElement(SearchContext context){
+    public SeleniumElement findElement(SearchContext context){
 
-        Element element = null;
+        SeleniumElement element = null;
         List<WebElement> webElements;
 
         try {
@@ -61,7 +61,7 @@ public class IdentityResolver {
                         badIdCache.add(attributes.get("id"));
 
                     else {
-                        element = new Element(webElements.get(0));
+                        element = new SeleniumElement(webElements.get(0));
                         element.setIdentity(new IdIdentity(attributes.get("id")));
                     }
                 }
